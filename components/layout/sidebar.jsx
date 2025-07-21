@@ -7,10 +7,10 @@ import Navigation from "../invoices/navigation"
 
 export default function Sidebar({ activeItem, setActiveItem }) {
   const navigationItems = [
-    { id: "home", label: "Home", icon: Gauge },
-    { id: "invoices", label: "Invoices", icon: FileText },
-    { id: "accounts", label: "Accounts", icon: CreditCard },
-    { id: "insights", label: "Insights & Reports", icon: ChartLine },
+    { id: "dashboard", label: "Home", icon: Gauge , href: "/dashboard" },
+    { id: "invoices", label: "Invoices", icon: FileText,href: "/invoices" },
+    { id: "accounts", label: "Accounts", icon: CreditCard, href: "/dashboard" },
+    { id: "insights", label: "Insights & Reports", icon: ChartLine, href: "/dashboard" },
   ]
 
   return (

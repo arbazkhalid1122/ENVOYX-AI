@@ -2,11 +2,110 @@
 
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
-export function TermsContent() {
-  const [agreed, setAgreed] = useState(false)
+export function TermsContent({ activeSection, setActiveSection, setSectionProgress, setIndicatorTop, setIndicatorHeight }) {
+
+  console.log("activeSection", activeSection); const [agreed, setAgreed] = useState(false)
   const router = useRouter()
+
+  const sections = [
+    { num: "1", title: "Introduction", id: "introduction" },
+    { num: "2", title: "User Responsibilities", id: "user-responsibilities" },
+    { num: "3", title: "Platform Usage", id: "platform-usage" },
+    { num: "4", title: "Fund Transactions", id: "fund-transactions" },
+    { num: "5", title: "Termination & Suspension", id: "termination-suspension" },
+    { num: "6", title: "Liability & Indemnification", id: "liability-indemnification" },
+    { num: "7", title: "Change to Terms", id: "change-to-terms" },
+  ]
+
+useEffect(() => {
+  const handleScroll = () => {
+    const scrollTop = window.scrollY
+    const windowHeight = window.innerHeight
+    const documentHeight = document.documentElement.scrollHeight
+
+    const isNearBottom = scrollTop + windowHeight >= documentHeight - 100
+
+    const sectionElements = sections
+      .map((section) => ({
+        ...section,
+        element: document.getElementById(section.id),
+      }))
+      .filter((item) => item.element)
+
+    let currentActiveSection = "1"
+
+    if (isNearBottom) {
+      currentActiveSection = sections[sections.length - 1].num
+    } else {
+      sectionElements.forEach((section) => {
+        if (!section.element) return
+        const rect = section.element.getBoundingClientRect()
+     const isInView =
+  rect.top < windowHeight * 0.6 &&
+  rect.bottom > windowHeight * 0.3 &&
+  window.scrollY > 100; // delay activation
+
+        if (isInView) {
+          currentActiveSection = section.num
+        }
+      })
+    }
+
+    setActiveSection(currentActiveSection)
+
+    const currentSectionIndex = sections.findIndex(
+      (s) => s.num === currentActiveSection
+    )
+    const totalSections = sections.length
+    const baseProgress = (currentSectionIndex / totalSections) * 100
+
+    let sectionInternalProgress = 0
+
+    const currentSectionElement = document.getElementById(
+      sections[currentSectionIndex]?.id
+    )
+
+    if (currentSectionElement && !isNearBottom) {
+      const rect = currentSectionElement.getBoundingClientRect()
+      const containerOffsetTop =
+        document.documentElement.scrollTop || document.body.scrollTop
+      const sectionTop = rect.top + containerOffsetTop
+      const relativeTop = sectionTop - 250 // adjust for header height
+
+      setIndicatorTop(relativeTop)
+      setIndicatorHeight(rect.height)
+
+      if (rect.top <= windowHeight * 0.5) {
+        sectionInternalProgress = Math.min(
+          1,
+          Math.max(0, (windowHeight * 0.5 - rect.top) / rect.height)
+        )
+      }
+    } else if (isNearBottom) {
+      const lastElement = document.getElementById(
+        sections[sections.length - 1].id
+      )
+      if (lastElement) {
+        setIndicatorTop(lastElement.offsetTop)
+        setIndicatorHeight(lastElement.offsetHeight)
+      }
+      sectionInternalProgress = 1
+    }
+
+    const progressPerSection = 100 / totalSections
+    const totalProgress =
+      baseProgress + sectionInternalProgress * progressPerSection
+
+    setSectionProgress(Math.min(100, Math.max(0, totalProgress)))
+  }
+
+  window.addEventListener("scroll", handleScroll)
+  handleScroll()
+
+  return () => window.removeEventListener("scroll", handleScroll)
+}, [setActiveSection, setSectionProgress, setIndicatorTop, setIndicatorHeight])
 
   const handleAcceptTerms = () => {
     router.push("/create-profile")
@@ -16,17 +115,23 @@ export function TermsContent() {
     router.push("/validate-access-code")
   }
 
+  const getSectionTitleColor = (sectionNum) => {
+    return sectionNum === activeSection ? "text-[#03a84e]" : "text-[#272635]"
+  }
+
   return (
-    <div className="flex-1 p-24 bg-white">
-      <div className="max-w-4xl">
-        <h1 className="text-3xl font-semibold text-[#272635] mb-2">
+    <div className="flex-1 p-4 sm:p-8 lg:p-24 bg-white">
+      <div className="max-w-4xl pb-40">
+        <h1 className="text-2xl sm:text-3xl font-semibold text-[#272635] mb-2">
           Read and agree the EnvoyX fund manager terms of service
         </h1>
-        <p className="text-[#5f6057] mb-8">Last updated: 30th March, 2025.</p>
+        <p className="text-[#5f6057] mb-6 sm:mb-8">Last updated: 30th March, 2025.</p>
 
         <div className="space-y-8">
-          <section>
-            <h2 className="text-xl font-semibold text-[#272635] mb-4">7.1 Introduction</h2>
+          <section id="introduction">
+            <h2 className={`text-lg sm:text-xl font-semibold mb-4 transition-colors ${getSectionTitleColor("1")}`}>
+              7.1 Introduction
+            </h2>
             <p className="text-[#272635] leading-relaxed">
               By using the EnvoyX Financial Manager Platform, you agree to comply with these Terms of Service ("Terms").
               These Terms govern your access to and use of the platform, including all features, functionalities, and
@@ -34,8 +139,10 @@ export function TermsContent() {
             </p>
           </section>
 
-          <section>
-            <h2 className="text-xl font-semibold text-[#03a84e] mb-4">7.2 User Responsibilities</h2>
+          <section id="user-responsibilities">
+            <h2 className={`text-lg sm:text-xl font-semibold mb-4 transition-colors ${getSectionTitleColor("2")}`}>
+              7.2 User Responsibilities
+            </h2>
             <ul className="space-y-2 text-[#272635]">
               <li>• Users must provide accurate and complete information during onboarding.</li>
               <li>• Users are responsible for maintaining the security of their accounts.</li>
@@ -43,8 +150,10 @@ export function TermsContent() {
             </ul>
           </section>
 
-          <section>
-            <h2 className="text-xl font-semibold text-[#272635] mb-4">7.3 Platform Usage</h2>
+          <section id="platform-usage">
+            <h2 className={`text-lg sm:text-xl font-semibold mb-4 transition-colors ${getSectionTitleColor("3")}`}>
+              7.3 Platform Usage
+            </h2>
             <ul className="space-y-2 text-[#272635]">
               <li>
                 • EnvoyX facilitates invoice verification and financial transactions but does not guarantee the
@@ -57,8 +166,10 @@ export function TermsContent() {
             </ul>
           </section>
 
-          <section>
-            <h2 className="text-xl font-semibold text-[#272635] mb-4">7.4 Fund Transactions</h2>
+          <section id="fund-transactions">
+            <h2 className={`text-lg sm:text-xl font-semibold mb-4 transition-colors ${getSectionTitleColor("4")}`}>
+              7.4 Fund Transactions
+            </h2>
             <ul className="space-y-2 text-[#272635]">
               <li>• All transactions made via the platform are subject to verification and approval workflows.</li>
               <li>• Users must ensure sufficient funds in their EnvoyX wallets before approving payments.</li>
@@ -68,16 +179,20 @@ export function TermsContent() {
             </ul>
           </section>
 
-          <section>
-            <h2 className="text-xl font-semibold text-[#272635] mb-4">7.5 Termination & Suspension</h2>
+          <section id="termination-suspension">
+            <h2 className={`text-lg sm:text-xl font-semibold mb-4 transition-colors ${getSectionTitleColor("5")}`}>
+              7.5 Termination & Suspension
+            </h2>
             <ul className="space-y-2 text-[#272635]">
               <li>• EnvoyX reserves the right to suspend or terminate access to any user violating these Terms.</li>
               <li>• Financial institutions may request account closure by providing written notice.</li>
             </ul>
           </section>
 
-          <section>
-            <h2 className="text-xl font-semibold text-[#272635] mb-4">7.6 Liability & Indemnification</h2>
+          <section id="liability-indemnification">
+            <h2 className={`text-lg sm:text-xl font-semibold mb-4 transition-colors ${getSectionTitleColor("6")}`}>
+              7.6 Liability & Indemnification
+            </h2>
             <ul className="space-y-2 text-[#272635]">
               <li>• EnvoyX is not responsible for financial losses resulting from misinterpretation of data.</li>
               <li>
@@ -87,8 +202,10 @@ export function TermsContent() {
             </ul>
           </section>
 
-          <section>
-            <h2 className="text-xl font-semibold text-[#272635] mb-4">7.7 Changes to Terms</h2>
+          <section id="change-to-terms">
+            <h2 className={`text-lg sm:text-xl font-semibold mb-4 transition-colors ${getSectionTitleColor("7")}`}>
+              7.7 Changes to Terms
+            </h2>
             <p className="text-[#272635] leading-relaxed">
               EnvoyX reserves the right to modify these Terms at any time. Users will be notified of significant
               changes.
@@ -97,12 +214,12 @@ export function TermsContent() {
         </div>
 
         <div className="mt-6 rounded-lg">
-              <div className="flex items-start gap-2 py-4 border-b border-[#E4E4E7] mb-4">
+          <div className="flex items-start gap-2 py-4 border-b border-[#E4E4E7] mb-4">
             <input
               id="agree"
               type="checkbox"
-              checked={true}
-              onChange={e => setAgreed(e.target.checked)}
+              checked={agreed}
+              onChange={(e) => setAgreed(e.target.checked)}
               className="mt-1 accent-[#03a84e]"
             />
             <label htmlFor="agree" className="text-sm text-[#5f6057]">
@@ -113,11 +230,15 @@ export function TermsContent() {
               .
             </label>
           </div>
-          <div className="flex justify-between ">
-            <Button variant="outline" className="p-5 bg-transparent" onClick={handleDecline}>
+          <div className="flex flex-col sm:flex-row justify-between gap-4">
+            <Button variant="outline" className="p-5 bg-transparent order-2 sm:order-1" onClick={handleDecline}>
               Decline
             </Button>
-            <Button className="bg-[#081f24] hover:bg-[#0d2c0d] text-white p-5" onClick={handleAcceptTerms}>
+            <Button
+              className="bg-[#081f24] hover:bg-[#0d2c0d] text-white p-5 order-1 sm:order-2"
+              onClick={handleAcceptTerms}
+              disabled={!agreed}
+            >
               Accept & proceed
             </Button>
           </div>

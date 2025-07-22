@@ -1,9 +1,11 @@
 "use client"
 
 import { useState } from "react"
-import { Bell, Search, X } from "lucide-react"
+import { Bell, MoreHorizontal, MoveUpRight, Search, X } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import Sidebar from "./layout/sidebar"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
+import { Button } from "./ui/button"
 
 export function DashboardContent() {
   const [showProfileHelp, setShowProfileHelp] = useState(true)
@@ -44,6 +46,7 @@ export function DashboardContent() {
                 status: "Not started",
                 color: "bg-purple-100",
                 progress: "0%",
+                src:'/Frame.svg'
               },
               {
                 title: "Complete KYC/B",
@@ -51,6 +54,8 @@ export function DashboardContent() {
                 status: "Not started",
                 color: "bg-green-100",
                 progress: "0%",
+                src:'/Frame1.svg'
+
               },
               {
                 title: "Financing preferences",
@@ -58,51 +63,69 @@ export function DashboardContent() {
                 status: "Not started",
                 color: "bg-blue-100",
                 progress: "0%",
+                src:'/Frame2.svg'
+
               },
             ].map((item, index) => (
               <div key={index} className="bg-white rounded-xl p-6 border border-[#e4e4e7]">
-                <div className={`w-16 h-16 ${item.color} rounded-xl mb-4 flex items-center justify-center`}>
+                {/* <div className={`w-16 h-16 ${item.color} rounded-xl mb-4 flex items-center justify-center`}>
                   <div className="w-8 h-8 bg-white rounded-lg"></div>
-                </div>
+                </div> */}
+                <img src={item?.src} alt="" className="mb-12" />
                 <h3 className="font-semibold text-[#272635] mb-2">{item.title}</h3>
-                <p className="text-sm text-[#5f6057] mb-4">{item.description}</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-[#5f6057]">{item.status}</span>
-                  <span className="text-xs text-[#5f6057]">{item.progress}</span>
-                </div>
-                <div className="w-full bg-[#e4e4e7] rounded-full h-1 mt-2">
-                  <div className="bg-[#03a84e] h-1 rounded-full" style={{ width: item.progress }}></div>
-                </div>
-                <button className="text-[#03a84e] text-sm font-medium mt-3 hover:underline">Preview & start →</button>
+                <p className="text-sm mb-4">{item.description}</p>
+                {index === 0 && <button className="text-[#03a84e] text-sm underline flex items-center gap-1">Preview & sign <MoveUpRight className="h-3 w-3"/></button>}
               </div>
             ))}
           </div>
         </div>
 
         {/* Account overview */}
-        <div className="bg-white rounded-xl p-6 border border-[#e4e4e7]">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-semibold text-[#272635]">Account overview</h2>
-            <div className="flex items-center gap-4 text-sm">
-              <select className="border border-[#e4e4e7] rounded-lg px-3 py-1">
-                <option>Last 3 months</option>
-              </select>
-              <select className="border border-[#e4e4e7] rounded-lg px-3 py-1">
-                <option>Daily</option>
-              </select>
-              <select className="border border-[#e4e4e7] rounded-lg px-3 py-1">
-                <option>All invoices</option>
-              </select>
+        <div className="bg-white rounded-xl p-8 border border-gray-200 shadow-sm">
+          {/* Header */}
+          <div className="flex items-start justify-between mb-8">
+            <div>
+              <h2 className="text-xl font-semibold text-gray-900 mb-1">Account overview</h2>
+              <p className="text-sm text-gray-500">Showing total visitors for the last 3 months</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <Select defaultValue="last-3-months">
+                <SelectTrigger className="w-auto border-gray-200 text-sm">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="last-3-months">Last 3 months</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select defaultValue="daily">
+                <SelectTrigger className="w-auto border-gray-200 text-sm">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="daily">Daily</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select defaultValue="all-invoices">
+                <SelectTrigger className="w-auto border-gray-200 text-sm">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all-invoices">All invoices</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
-          <div className="text-center mb-8">
-            <h3 className="text-sm text-[#5f6057] mb-2">Total invoice financed</h3>
-            <div className="text-4xl font-bold text-[#272635] mb-2">
-              00.0 <span className="text-lg text-[#5f6057]">XOF</span>
+          {/* Main Metric */}
+          <div className="text-center mb-12">
+            <h3 className="text-sm text-gray-500 mb-3">Total invoice financed</h3>
+            <div className="mb-3">
+              <span className="text-5xl font-bold text-gray-900">00.0</span>
+              <span className="text-lg text-gray-400 ml-2">XOF</span>
             </div>
-            <div className="text-sm text-[#5f6057]">
-              vs 32,500,650.00 XOF last period <span className="text-red-500">-8.38%</span>
+            <div className="text-sm text-gray-500">
+              vs. <span className="text-gray-700">32,500,650.00 XOF</span> last period{" "}
+              <span className="text-green-600 font-medium">+38.7%</span>
             </div>
           </div>
 
@@ -134,13 +157,13 @@ export function DashboardContent() {
                 <h4 className="text-sm text-[#5f6057] mb-2">{item.title}</h4>
                 <div className="text-2xl font-bold text-[#272635] mb-1">
                   {item.value} <span className="text-sm text-[#5f6057]">{item.unit}</span>
-                </div>
+              </div>
                 <div className="text-xs text-[#5f6057] mb-2">{item.subtitle}</div>
                 <div className="text-xs text-[#5f6057]">{item.pending}</div>
               </div>
             ))}
-          </div>
         </div>
+      </div>
 
         {/* Profile completion help */}
         {showProfileHelp && (

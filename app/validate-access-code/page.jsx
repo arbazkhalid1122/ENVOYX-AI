@@ -1,10 +1,10 @@
 'use client'
-import { Check } from "lucide-react"
+import { Check, CircleQuestionMark } from "lucide-react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import Header from "@/components/layout/header"
+import Header from "@/components/Header"
 
 function ValidateAccessCodePage() {
   return (
@@ -34,29 +34,28 @@ export default ValidateAccessCodePage
   }
 
   return (
-    <div className="bg-white rounded-2xl p-12 max-w-md w-full mx-4 shadow-2xl">
+    <div className="bg-white rounded-2xl p-16 max-w-xl w-full mx-4 shadow-2xl">
       <div className="text-center mb-8">
-        <h1 className="text-2xl font-semibold text-[#272635] mb-4">Validate your access code</h1>
+        <h1 className="text-3xl font-medium text-[#081F24] mb-4">Validate your access code</h1>
         <p className="text-[#5f6057] leading-relaxed">
           Access code is way we validate each of our partner financial partner to avoid spam and reduce fraud.
         </p>
       </div>
 
       <div className="mb-8">
-        <div className="flex items-center gap-3 mb-4">
-          <span className="text-[#272635]">Provide the 6-digit code sent to your email</span>
-          <div className="w-6 h-6 bg-[#03a84e] rounded-full flex items-center justify-center">
-            <Check className="w-4 h-4 text-white" />
-          </div>
+        <div className="flex items-center gap-3 mb-4 justify-between">
+          <span className="text-[#081F24] text-sm">Provide the 6-digit code sent to your email</span>
+            <CircleQuestionMark  className="w-5 h-5 fill-[#03A84E] stroke-white" />
         </div>
 
-        <div className="flex gap-2 mb-6">
-          {[...Array(6)].map((_, i) => (
+        <div className="flex gap-4 mb-6 w-full">
+          {[...Array(5)].map((_, i) => (
             <Input
               key={i}
               type="text"
+              placeholder="."
               maxLength={1}
-              className="w-12 h-12 text-center text-lg font-semibold border-2 border-[#e4e4e7] rounded-lg focus:border-[#03a84e] focus:ring-[#03a84e]"
+              className="flex-1 h-18 text-center text-lg font-semibold border-1 border-[#E4E4E7] rounded-sm shadow-none "
               onChange={(e) => {
                 const value = e.target.value
                 if (value && i < 5) {
@@ -70,34 +69,30 @@ export default ValidateAccessCodePage
       </div>
 
       <div className="flex items-center justify-between mb-8">
-        <button className="text-[#272635] hover:text-[#03a84e] transition-colors">
+        <button className="text-[#081F24] hover:text-[#03a84e] transition-colors">
           {"Didn't receive any access code?"}
         </button>
         <Button
-          className="bg-[#081f24] hover:bg-[#0d2c0d] text-white px-8 py-2 rounded-lg"
+          className="bg-[#081f24] hover:bg-[#0d2c0d] text-white px-8 py-6 rounded-lg"
           onClick={handleValidate}
           disabled={isLoading}
         >
           {isLoading ? "Validating..." : "Validate"}
         </Button>
       </div>
-
-      <div className="text-center text-sm text-[#5f6057] space-y-1">
-        <div>
-          © 2025 <span className="text-[#03a84e] font-medium">EnvoyX</span>, Inc. All rights reserved |
-          <a href="#" className="hover:text-[#03a84e] ml-1">
-            Privacy Policy
-          </a>{" "}
-          |
-          <a href="#" className="hover:text-[#03a84e] ml-1">
-            Terms of Use
-          </a>
-        </div>
-        <div>
-          <a href="#" className="hover:text-[#03a84e]">
-            Service Provider Agreement
-          </a>
-        </div>
+      <div className="border-t border-[#E4E4E7] my-8" />
+      <div className="text-center text-sm text-gray-400 space-y-1 flex justify-center items-center">
+        <a href="#" className="hover:text-[#03a84e] ml-1">
+          Privacy Policy
+        </a>
+        <span className="mx-2">|</span>
+        <a href="#" className="hover:text-[#03a84e] ml-1">
+          Terms of Use
+        </a>
+        <span className="mx-2">|</span>
+        <a href="#" className="hover:text-[#03a84e]">
+          Service Provider Agreement
+        </a>
       </div>
     </div>
   )
@@ -110,24 +105,11 @@ export default ValidateAccessCodePage
  function BackgroundElements() {
   return (
     <div className="absolute inset-0">
-      {/* Mountains silhouette */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0d2c0d] to-transparent"></div>
-
-      {/* Floating documents */}
-      <div className="absolute bottom-20 left-10 w-16 h-20 bg-white rounded transform rotate-12 shadow-lg"></div>
-      <div className="absolute bottom-32 right-20 w-20 h-24 bg-white rounded transform -rotate-6 shadow-lg"></div>
-      <div className="absolute top-1/2 left-1/4 w-12 h-16 bg-white rounded transform rotate-45 shadow-lg"></div>
-
-      {/* Green shield with checkmark */}
-      <div className="absolute bottom-40 right-1/3 w-16 h-20 bg-[#03a84e] rounded-t-full rounded-b-sm flex items-center justify-center shadow-lg">
-        <Check className="w-8 h-8 text-white" />
-      </div>
-
-      {/* Floating green elements */}
-      <div className="absolute top-1/4 left-1/3 w-8 h-2 bg-[#61c454] rounded-full"></div>
-      <div className="absolute top-1/3 right-1/4 w-12 h-2 bg-[#7ccc4a] rounded-full"></div>
-      <div className="absolute bottom-1/3 left-1/5 w-6 h-2 bg-[#66db4a] rounded-full"></div>
-      <div className="absolute top-2/3 right-1/5 w-10 h-2 bg-[#95f270] rounded-full"></div>
+      <img
+        src="HeroBackgroun1.svg"
+        alt="Mountains"
+        className="absolute bottom-0 left-0 w-full h-auto object-cover"
+      />
     </div>
   )
 }

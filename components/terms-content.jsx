@@ -2,8 +2,10 @@
 
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
+import { useState } from "react"
 
 export function TermsContent() {
+  const [agreed, setAgreed] = useState(false)
   const router = useRouter()
 
   const handleAcceptTerms = () => {
@@ -15,7 +17,7 @@ export function TermsContent() {
   }
 
   return (
-    <div className="flex-1 p-8">
+    <div className="flex-1 p-24 bg-white">
       <div className="max-w-4xl">
         <h1 className="text-3xl font-semibold text-[#272635] mb-2">
           Read and agree the EnvoyX fund manager terms of service
@@ -94,19 +96,28 @@ export function TermsContent() {
           </section>
         </div>
 
-        <div className="mt-12 p-4 bg-[#f7f7f7] rounded-lg">
-          <p className="text-sm text-[#5f6057] mb-4">
-            By continuing you agree to EnvoyX{" "}
-            <a href="#" className="text-[#03a84e] hover:underline">
-              Terms of Service and Privacy Policy
-            </a>
-            .
-          </p>
-          <div className="flex gap-4">
-            <Button variant="outline" className="px-8 bg-transparent" onClick={handleDecline}>
+        <div className="mt-6 rounded-lg">
+              <div className="flex items-start gap-2 py-4 border-b border-[#E4E4E7] mb-4">
+            <input
+              id="agree"
+              type="checkbox"
+              checked={true}
+              onChange={e => setAgreed(e.target.checked)}
+              className="mt-1 accent-[#03a84e]"
+            />
+            <label htmlFor="agree" className="text-sm text-[#5f6057]">
+              By continuing you agree to EnvoyX{" "}
+              <a href="#" className="text-[#03a84e] hover:underline">
+                Terms of Service and Privacy Policy
+              </a>
+              .
+            </label>
+          </div>
+          <div className="flex justify-between ">
+            <Button variant="outline" className="p-5 bg-transparent" onClick={handleDecline}>
               Decline
             </Button>
-            <Button className="bg-[#081f24] hover:bg-[#0d2c0d] text-white px-8" onClick={handleAcceptTerms}>
+            <Button className="bg-[#081f24] hover:bg-[#0d2c0d] text-white p-5" onClick={handleAcceptTerms}>
               Accept & proceed
             </Button>
           </div>

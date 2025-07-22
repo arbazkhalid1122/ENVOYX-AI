@@ -12,13 +12,13 @@ export function TermsSidebar({ activeSection = "2" }) {
   ]
 
   return (
-    <div className="w-80 bg-white border-r border-[#e4e4e7] min-h-[calc(100vh-73px)] p-6">
+    <div className="w-90 bg-white border-r border-[#E4E4E7] min-h-[calc(100vh-73px)] px-14 pt-24">
       <div className="space-y-4">
         {sections.map((item) => (
           <div
             key={item.num}
-            className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer ${
-              item.num === activeSection ? "bg-[#edfeef] text-[#03a84e]" : "text-[#272635] hover:bg-[#f7f7f7]"
+            className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer w-[fit-content] ${
+              item.num === activeSection ? "text-[#03A84E]" : "text-[#272635]"
             }`}
           >
             <span className="font-medium">{item.num}.</span>

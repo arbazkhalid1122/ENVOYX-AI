@@ -51,7 +51,7 @@ function ValidationForm() {
       <div className="mb-6 sm:mb-8">
         <div className="flex items-center gap-2 sm:gap-3 mb-4 justify-between">
           <span className="text-[#081F24] text-xs sm:text-sm">Provide the 6-digit code sent to your email</span>
-          <CircleQuestionMark className="w-4 h-4 sm:w-5 sm:h-5 fill-[#03A84E] stroke-white flex-shrink-0" />
+        <CircleQuestionMark className="w-4 h-4 sm:w-5 sm:h-5 fill-[#03A84E] text-white stroke-white" />
         </div>
 
         <div className="flex gap-2 sm:gap-4 mb-6 w-full">

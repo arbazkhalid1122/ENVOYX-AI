@@ -33,20 +33,11 @@ export default function Sidebar({ activeItem, setActiveItem }) {
       <Navigation items={navigationItems} activeItem={activeItem} setActiveItem={setActiveItem} />
 
       {/* User Profile - Bottom */}
-      <div className="p-4 border-t border-[#e4e4e7]">
-        <div className="flex items-center gap-3 mb-4">
-          <Avatar className="w-10 h-10">
-            <AvatarImage src="/placeholder.svg?height=40&width=40" />
-            <AvatarFallback className="bg-[#f5bd4f] text-white text-sm font-medium">AK</AvatarFallback>
-          </Avatar>
-          <div className="flex-1 min-w-0">
-            <div className="text-sm font-medium text-[#000000] truncate">Assi Konate</div>
-            <div className="text-xs text-[#a1a1aa] truncate">Risk Analyst</div>
-          </div>
-          <ChevronLeft className="w-4 h-4 text-[#a1a1aa] rotate-90" />
-        </div>
-        <button className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-[#ee6a5f] hover:bg-[#ee6a5f]/10 transition-colors">
-          <LogOut className="w-4 h-4" />
+           <UserProfile name="Accessux Pharmacie" location="Cocody, Abidjan" initials="AP" showChevron={true} />
+      <div className="p-4 border-t border-[#e4e4e7] mt-6">
+
+        <button className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-black font-medium hover:bg-[#ee6a5f]/10 transition-colors border border-[#e4e4e7] rounded-full w-[fit-content]">
+          <LogOut className="w-4 h-4 text-[#ee6a5f]" />
           Logout
         </button>
       </div>

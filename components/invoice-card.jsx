@@ -33,7 +33,7 @@ export default function InvoiceCard({ data, className = "" }) {
             <span className="text-sm font-normal text-gray-500 uppercase tracking-wide">{currency}</span>
           </div>
           <h3 className="text-base font-medium text-gray-900">{title}</h3>
-          {percentageChange && <p className="text-xs text-gray-500 mt-1">{percentageChange}</p>}
+          {/* {percentageChange && <p className="text-xs text-gray-500 mt-1">{percentageChange}</p>} */}
         </div>
         <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-gray-400 hover:text-gray-600 flex-shrink-0">
           <MoreHorizontal className="h-4 w-4" />

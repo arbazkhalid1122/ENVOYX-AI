@@ -182,7 +182,7 @@ export function ProfileForm() {
         <Button
           className="bg-[#081f24] hover:bg-[#0d2c0d] text-white p-4 sm:p-6 w-full sm:w-auto order-1 sm:order-2"
           onClick={handleActivateAccount}
-          disabled={isLoading || isFormIncomplete}
+          // disabled={isLoading || isFormIncomplete}
         >
           {isLoading ? "Activating..." : "Activate your account"}
         </Button>

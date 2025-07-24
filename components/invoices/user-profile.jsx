@@ -1,9 +1,6 @@
 "use client"
-
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { ChevronsUpDown } from "lucide-react"
-
-
 
 export default function UserProfile({ name, location, initials, showChevron = false }) {
   return (

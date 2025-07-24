@@ -1,16 +1,16 @@
 "use client"
-
-import { usePathname, useRouter } from "next/navigation"
-import { useEffect } from "react"
+import { usePathname } from "next/navigation"
 
 export default function Navigation({ items, activeItem, setActiveItem }) {
-const router = usePathname()
- return (
+  const router = usePathname()
+
+  return (
     <nav className="flex-1 py-4">
       <ul className="space-y-2">
         {items.map((item) => {
           const Icon = item.icon
           const isActive = router === `/${item.id}`
+
           return (
             <li key={item.id}>
               <button

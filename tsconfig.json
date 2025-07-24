@@ -26,6 +26,6 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "components/onBoarding/business-verification-modal.jsx"  ],
   "exclude": ["node_modules"]
 }

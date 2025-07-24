@@ -31,7 +31,7 @@ function ValidationForm() {
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 1000))
     setIsLoading(false)
-    router.push("/terms-and-conditions")
+    router.push("/on-boarding")
   }
 
   return (
@@ -87,9 +87,9 @@ function ValidationForm() {
         </Button>
       </div>
 
-      <div className="border-t border-[#E4E4E7] my-6 sm:my-8" />
+      <div className="border-t border-[#E4E4E7] my-6 sm:my-8 hidden sm:block" />
 
-      <div className="text-center text-xs sm:text-sm text-gray-400 space-y-2 sm:space-y-1">
+      <div className="text-center text-xs sm:text-sm text-gray-400 space-y-2 sm:space-y-1 hidden sm:block">
         <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-0">
           <a href="#" className="hover:text-[#03a84e]">
             Privacy Policy

@@ -28,24 +28,7 @@ export function TermsSidebar({ activeSection, setActiveSection, scrollIndicatorP
 
   return (
     <>
-      {/* Mobile Menu Button */}
-      <div className="lg:hidden sticky top-[73px] z-40 bg-white border-b border-[#E4E4E7] px-4 py-3">
-        <div className="flex items-center justify-between">
-          <h2 className="font-medium text-[#272635]">Table of Contents</h2>
-          <Button variant="ghost" size="sm" onClick={() => setIsOpen(!isOpen)} className="p-2">
-            {isOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-          </Button>
-        </div>
-
-        {/* Mobile Progress Bar */}
-        <div className="mt-2 w-full bg-[#E4E4E7] rounded-full h-0.5">
-          <div
-            className="bg-[#03A84E] h-0.5 rounded-full transition-all duration-500"
-            style={{ width: `${(scrollIndicatorPosition / 200) * 100}%` }}
-          />
-        </div>
-      </div>
-
+   
       {/* Desktop Sidebar */}
       <div className="hidden lg:block w-90 bg-white min-h-[calc(100vh-73px)] px-14 pt-24 sticky top-[73px] relative">
         <div className="space-y-4">

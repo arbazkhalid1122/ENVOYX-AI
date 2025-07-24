@@ -7,20 +7,32 @@ import { Card, CardContent } from "@/components/ui/card"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import {BusinessProfileForm } from "@/components/onBoarding/sidebar"
+import { BusinessProfileForm } from "@/components/onBoarding/sidebar"
 import { useState } from "react"
+import { BusinessVerificationModal } from "@/components/onBoarding/business-verification-modal"
 
 function DashboardContent() {
     const [isOpen, setIsOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(true)
 
+  const handleCancel = () => {
+    console.log("User cancelled verification")
+  }
+
+  const handleProceed = () => {
+    console.log("User proceeded with verification")
+  }
     const toggleSidebar = () => {
         setIsOpen(!isOpen)
     }
 
+
+    
+
     return (
-        <div className="min-h-screen bg-[#f7f7f7] flex">
+        <div className=" bg-[#f7f7f7] flex">
             <Sidebar />
-            <div className="min-h-screen bg-[#f7f7f7] flex-1">
+            <div className=" bg-[#f7f7f7] flex-1">
                 {/* Main Content */}
                 <div className="flex-col">
                     {/* Main Content Area */}
@@ -113,28 +125,35 @@ function DashboardContent() {
                             </CardContent>
                         </Card>
                     </main>
-            <SidebarProvider open={isOpen} onOpenChange={setIsOpen}>
-              {isOpen && (
-          <>
-            {/* Dark backdrop overlay */}
-            <div
-              className="fixed inset-0 bg-black/40 z-40 transition-all duration-300 ease-in-out"
-              onClick={() => setIsOpen(false)}
-              aria-hidden="true"
-            />
+                    <SidebarProvider open={isOpen} onOpenChange={setIsOpen} className={"fixed "}>
+                        {isOpen && (
+                            <>
+                                {/* Dark backdrop overlay */}
+                                <div
+                                    className="fixed inset-0 bg-black/40 z-40 transition-all duration-300 ease-in-out"
+                                    onClick={() => setIsOpen(false)}
+                                    aria-hidden="true"
+                                />
 
-            <BusinessProfileForm
-              onSave={(data) => {
-                console.log("Business profile saved:", data)
-                setIsOpen(false)
-              }}
-              onCancel={() => setIsOpen(false)}
-            />
-          </>
-        )}
-      </SidebarProvider>
+                                <BusinessProfileForm
+                                    onSave={(data) => {
+                                        console.log("Business profile saved:", data)
+                                        setIsOpen(false)
+                                    }}
+                                    onCancel={() => setIsOpen(false)}
+                                />
+                            </>
+                        )}
+                    </SidebarProvider>
                 </div>
             </div>
+
+              <BusinessVerificationModal
+        open={isModalOpen}
+        onOpenChange={setIsModalOpen}
+        onCancel={handleCancel}
+        onProceed={handleProceed}
+      />
         </div>
     )
 }

@@ -1,4 +1,5 @@
 "use client"
+
 import { usePathname } from "next/navigation"
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar"
 import Sidebar from "@/components/layout/sidebar"
@@ -21,21 +22,19 @@ export default function ConditionalSidebarLayout({ children }) {
   // If sidebar needed, wrap with SidebarProvider
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen ">
-        <Sidebar />
-        <SidebarInset className="flex-1 bg-[#f7f7f7] ">
-          {/* Mobile header with trigger */}
-          <div className="md:hidden flex items-center p-4 bg-white border-b border-[#e4e4e7] sticky top-0">
-            <SidebarTrigger className="mr-4">
-              <Menu className="h-6 w-6" />
-            </SidebarTrigger>
-            <h1 className="text-lg font-semibold">Menu</h1>
-          </div>
+      <Sidebar />
+      <SidebarInset>
+        {/* Mobile header with trigger */}
+        <div className="md:hidden flex items-center p-4 bg-white border-b border-[#e4e4e7] sticky top-0 w-full">
+          <SidebarTrigger className="mr-4">
+            <Menu className="h-6 w-6" />
+          </SidebarTrigger>
+          <h1 className="text-lg font-semibold">Menu</h1>
+        </div>
 
-          {/* Main content */}
-          <main className="flex-1 min-h-0 ml-0 sm:ml-10">{children}</main>
-        </SidebarInset>
-      </div>
+        {/* Main content */}
+        <main className="flex-1 w-full bg-[#f7f7f7] pl-0 sm:pl-10">{children}</main>
+      </SidebarInset>
     </SidebarProvider>
   )
 }

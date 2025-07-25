@@ -103,7 +103,7 @@ function ValidationForm() {
 
 function BackgroundElements() {
   return (
-    <div className="absolute inset-0">
+    <div className="absolute inset-0 bg-[#192517]">
       <img src="HeroBackgroun1.svg" alt="Mountains" className="absolute bottom-0 left-0 w-full h-auto object-cover" />
     </div>
   )

@@ -1,6 +1,6 @@
 "use client"
 
-import { CircleIcon as CircleQuestionMark } from "lucide-react"
+import { CircleQuestionMark } from "lucide-react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Input } from "@/components/ui/input"
@@ -51,7 +51,7 @@ function ValidationForm() {
       <div className="mb-6 sm:mb-8">
         <div className="flex items-center gap-2 sm:gap-3 mb-4 justify-between">
           <span className="text-[#081F24] text-xs sm:text-sm">Provide the 6-digit code sent to your email</span>
-        <CircleQuestionMark className="w-4 h-4 sm:w-5 sm:h-5 fill-[#03A84E] text-white stroke-white" />
+<CircleQuestionMark className="w-4 h-4 sm:w-5 sm:h-5 fill-[#03A84E] text-white stroke-white" />
         </div>
 
         <div className="flex gap-2 sm:gap-4 mb-6 w-full">
@@ -110,7 +110,7 @@ function ValidationForm() {
 
 function BackgroundElements() {
   return (
-    <div className="absolute inset-0">
+    <div className="absolute inset-0 bg-[#192517]">
       <img src="HeroBackgroun1.svg" alt="Mountains" className="absolute bottom-0 left-0 w-full h-auto object-cover" />
     </div>
   )

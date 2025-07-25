@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation"
 
 function DashboardContent() {
     const [isOpen, setIsOpen] = useState(false)
-    const [isModalOpen, setIsModalOpen] = useState(true)
+    const [isModalOpen, setIsModalOpen] = useState(false)
     const route = useRouter()
 
     const handleCancel = () => {
@@ -85,7 +85,7 @@ function DashboardContent() {
                                         {index === 1 && (
                                             <button
                                                 onClick={toggleSidebar}
-                                                className="text-[#03a84e] text-xs sm:text-sm underline flex items-center gap-1"
+                                                className="text-[#03a84e] text-xs sm:text-sm underline flex items-center gap-1 cursor-pointer"
                                             >
                                                 Setup Profile <MoveUpRight className="h-3 w-3" />
                                             </button>
@@ -137,6 +137,7 @@ function DashboardContent() {
                                 <BusinessProfileForm
                                     onSave={(data) => {
                                         console.log("Business profile saved:", data)
+                                        setIsModalOpen(true)
                                         setIsOpen(false)
                                     }}
                                     onCancel={() => setIsOpen(false)}

@@ -3,10 +3,9 @@
 import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Badge } from "@/components/ui/badge"
-import { ZoomIn, ZoomOut, Download, Share2, ChevronLeft } from "lucide-react"
+import {  ChevronLeft } from "lucide-react"
 import { SignatureModal } from "@/components/onBoarding/signature-modal"
-import { Avatar } from "@/components/ui/avatar"
+import { useRouter } from "next/navigation"
 
 const documentContent = [
     {
@@ -89,6 +88,7 @@ export default function DocumentViewer() {
     const [showSignatureModal, setShowSignatureModal] = useState(false)
     const mainScrollRef = useRef(null)
     const pageRefs = useRef([])
+    const router = useRouter()
 
     // Handle scroll to update current page
     useEffect(() => {
@@ -260,7 +260,9 @@ export default function DocumentViewer() {
                                 Review this document and fill in the relevant fields. Finish the document when you're ready.
                             </div>
 
-                        <Button className="bg-white text-[#081F24]">Finish document</Button>
+                        <Button className="bg-white text-[#081F24] hover:bg-white"
+                        onClick={()=>router.push('/invoices')}
+                        >Finish document</Button>
                     </div>
                 </div>
             </div>

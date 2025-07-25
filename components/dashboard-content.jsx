@@ -103,7 +103,7 @@ export function DashboardContent() {
 
   return (
     <div className="min-h-screen bg-[#f7f7f7] flex">
-      <Sidebar />
+      {/* <Sidebar /> */}
       <div>
         {/* Header */}
         <header className="bg-white border-b border-[#e4e4e7] px-6 py-4 flex items-center justify-between">

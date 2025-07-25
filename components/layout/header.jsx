@@ -3,8 +3,13 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Search, Bell, Command, File } from "lucide-react"
+import { SidebarProvider } from "../ui/sidebar"
+import { useState } from "react"
+import InvoiceUploadDialog from "../invoices/finance-dialog"
 
 export default function Header() {
+  const [isOpen, setIsOpen] = useState(false)
+
   return (
     <header className="px-8 py-6">
       <div className="flex items-center justify-between">
@@ -29,15 +34,34 @@ export default function Header() {
 
           {/* Notification */}
           <Button variant="ghost" size="icon" className="text-[#ffcb37] bg-white h-10">
-<Bell className="fill-[#ffcb37] stroke-[#ffcb37]" />
+            <Bell className="fill-[#ffcb37] stroke-[#ffcb37]" />
           </Button>
 
           {/* Finance New Invoice Button */}
-          <Button className="bg-[#081f24] hover:bg-[#0e363f] text-white px-6 h-10">
+          <Button className="bg-[#081f24] hover:bg-[#0e363f] text-white px-6 h-10"
+            onClick={() => setIsOpen(true)}
+          >
             Finance New Invoice <File size={20} />
           </Button>
         </div>
       </div>
+      <SidebarProvider open={isOpen} onOpenChange={setIsOpen} className={"fixed z-100"}>
+        {isOpen && (
+          <>
+            {/* Dark backdrop overlay */}
+            <div
+              className="fixed top-auto right-auto bottom-auto left-auto md:inset-0 bg-black/40 transition-all duration-300 ease-in-out"
+              onClick={() => setIsOpen(false)}
+              aria-hidden="true"
+            />
+            <InvoiceUploadDialog
+            setIsOpen={setIsOpen}
+            isOpen={isOpen}
+            />
+
+          </>
+        )}
+      </SidebarProvider>
     </header>
   )
 }

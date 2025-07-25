@@ -207,7 +207,7 @@ function BusinessProfileForm({ onSave, onCancel, open = true, onOpenChange }) {
       >
         <ChevronLeft className="h-5 w-5 text-[#03A84E]" />
       </Button>
-      <h1 className="text-base sm:text-lg text-gray-900">Setup business profile</h1>
+      <h1 className="sm:text-lg text-gray-900 font-semibold">Setup business profile</h1>
     </div>
   )
 

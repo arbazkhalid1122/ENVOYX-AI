@@ -27,7 +27,7 @@ export function BusinessVerificationModal({ open, onOpenChange, onCancel, onProc
               alt="Background decorative lines"
               width={500}
               height={500}
-              className="w-full max-w-[300px] sm:max-w-[400px]"
+              // className="w-full max-w-[300px] sm:max-w-[400px]"
             />
           </div>
 

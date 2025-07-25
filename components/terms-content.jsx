@@ -21,91 +21,94 @@ export function TermsContent({ activeSection, setActiveSection, setSectionProgre
 
 useEffect(() => {
   const handleScroll = () => {
-    const scrollTop = window.scrollY
-    const windowHeight = window.innerHeight
-    const documentHeight = document.documentElement.scrollHeight
+    const scrollTop = window.scrollY;
+    const windowHeight = window.innerHeight;
 
-    const isNearBottom = scrollTop + windowHeight >= documentHeight - 100
+    const lastSection = document.getElementById("change-to-terms");
+    const blocker = document.getElementById("scroll-blocker");
 
+    if (lastSection && blocker) {
+      const lastBottom = lastSection.offsetTop + lastSection.offsetHeight;
+      const blockerTop = blocker.offsetTop;
+
+      // If user scrolls into or beyond the blocker, snap them back
+      if (scrollTop + windowHeight > blockerTop) {
+        window.scrollTo({
+          top: lastBottom - windowHeight + 50, // +50 for padding
+          behavior: "smooth",
+        });
+        return;
+      }
+    }
+
+    // --- Keep your existing scroll progress logic ---
     const sectionElements = sections
       .map((section) => ({
         ...section,
         element: document.getElementById(section.id),
       }))
-      .filter((item) => item.element)
+      .filter((item) => item.element);
 
-    let currentActiveSection = "1"
+    let currentActiveSection = "1";
 
-    if (isNearBottom) {
-      currentActiveSection = sections[sections.length - 1].num
-    } else {
-      sectionElements.forEach((section) => {
-        if (!section.element) return
-        const rect = section.element.getBoundingClientRect()
-     const isInView =
-  rect.top < windowHeight * 0.6 &&
-  rect.bottom > windowHeight * 0.3 &&
-  window.scrollY > 100; // delay activation
+    sectionElements.forEach((section) => {
+      if (!section.element) return;
+      const rect = section.element.getBoundingClientRect();
+      const isInView =
+        rect.top < windowHeight * 0.6 &&
+        rect.bottom > windowHeight * 0.3 &&
+        window.scrollY > 100;
 
-        if (isInView) {
-          currentActiveSection = section.num
-        }
-      })
-    }
+      if (isInView) {
+        currentActiveSection = section.num;
+      }
+    });
 
-    setActiveSection(currentActiveSection)
+    setActiveSection(currentActiveSection);
 
     const currentSectionIndex = sections.findIndex(
       (s) => s.num === currentActiveSection
-    )
-    const totalSections = sections.length
-    const baseProgress = (currentSectionIndex / totalSections) * 100
+    );
+    const totalSections = sections.length;
+    const baseProgress = (currentSectionIndex / totalSections) * 100;
 
-    let sectionInternalProgress = 0
-
+    let sectionInternalProgress = 0;
     const currentSectionElement = document.getElementById(
       sections[currentSectionIndex]?.id
-    )
+    );
 
-    if (currentSectionElement && !isNearBottom) {
-      const rect = currentSectionElement.getBoundingClientRect()
+    if (currentSectionElement) {
+      const rect = currentSectionElement.getBoundingClientRect();
       const containerOffsetTop =
-        document.documentElement.scrollTop || document.body.scrollTop
-      const sectionTop = rect.top + containerOffsetTop
-      const relativeTop = sectionTop - 250 // adjust for header height
+        document.documentElement.scrollTop || document.body.scrollTop;
+      const sectionTop = rect.top + containerOffsetTop;
+      const relativeTop = sectionTop - 250;
 
-      setIndicatorTop(relativeTop)
-      setIndicatorHeight(rect.height)
+      setIndicatorTop(relativeTop);
+      setIndicatorHeight(rect.height);
 
       if (rect.top <= windowHeight * 0.5) {
         sectionInternalProgress = Math.min(
           1,
           Math.max(0, (windowHeight * 0.5 - rect.top) / rect.height)
-        )
+        );
       }
-    } else if (isNearBottom) {
-      const lastElement = document.getElementById(
-        sections[sections.length - 1].id
-      )
-      if (lastElement) {
-        setIndicatorTop(lastElement.offsetTop)
-        setIndicatorHeight(lastElement.offsetHeight)
-      }
-      sectionInternalProgress = 1
     }
 
-    const progressPerSection = 100 / totalSections
+    const progressPerSection = 100 / totalSections;
     const totalProgress =
-      baseProgress + sectionInternalProgress * progressPerSection
+      baseProgress + sectionInternalProgress * progressPerSection;
 
-    setSectionProgress(Math.min(100, Math.max(0, totalProgress)))
-  }
+    setSectionProgress(Math.min(100, Math.max(0, totalProgress)));
+  };
 
-  window.addEventListener("scroll", handleScroll)
-  handleScroll()
+  window.addEventListener("scroll", handleScroll);
+  handleScroll();
 
-  return () => window.removeEventListener("scroll", handleScroll)
-}, [setActiveSection, setSectionProgress, setIndicatorTop, setIndicatorHeight])
+  return () => {
+    window.removeEventListener("scroll", handleScroll);
+  };
+}, [setActiveSection, setSectionProgress, setIndicatorTop, setIndicatorHeight]);
 
   const handleAcceptTerms = () => {
     router.push("/create-profile")

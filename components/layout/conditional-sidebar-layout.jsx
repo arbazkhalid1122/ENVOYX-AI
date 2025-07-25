@@ -33,7 +33,7 @@ export default function ConditionalSidebarLayout({ children }) {
           </div>
 
           {/* Main content */}
-          <main className="flex-1 min-h-0 ml-10">{children}</main>
+          <main className="flex-1 min-h-0 ml-0 sm:ml-10">{children}</main>
         </SidebarInset>
       </div>
     </SidebarProvider>

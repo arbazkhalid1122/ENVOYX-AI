@@ -20,16 +20,14 @@ export function BusinessVerificationModal({ open, onOpenChange, onCancel, onProc
         {/* Modal content */}
         <div className="p-4 sm:p-6 text-center">
           {/* Illustration container */}
-          <div className="relative mb-6 sm:mb-8 flex justify-center">
-            {/* Background decorative lines */}
-            <Image
-              src="/modalbg.svg"
-              alt="Background decorative lines"
-              width={500}
-              height={500}
-              // className="w-full max-w-[300px] sm:max-w-[400px]"
-            />
-          </div>
+          <div className="relative mb-6 sm:mb-8 flex justify-center w-full max-w-[500px] h-[300px]">
+  <Image
+    src="/modalbg.svg"
+    alt="Background decorative lines"
+    fill
+    className="object-cover"
+  />
+</div>
 
           {/* Text content */}
           <DialogHeader className="space-y-3 sm:space-y-4 mb-6 sm:mb-8 text-center flex flex-col items-center">

@@ -45,23 +45,21 @@ export default function Header() {
           </Button>
         </div>
       </div>
-      <SidebarProvider open={isOpen} onOpenChange={setIsOpen} className={"fixed z-100"}>
-        {isOpen && (
-          <>
-            {/* Dark backdrop overlay */}
-            <div
-              className="fixed top-auto right-auto bottom-auto left-auto md:inset-0 bg-black/40 transition-all duration-300 ease-in-out"
-              onClick={() => setIsOpen(false)}
-              aria-hidden="true"
-            />
-            <InvoiceUploadDialog
-            setIsOpen={setIsOpen}
-            isOpen={isOpen}
-            />
+     {isOpen && (
+  <SidebarProvider open={isOpen} onOpenChange={setIsOpen} className="fixed z-100">
+    {/* Dark backdrop overlay */}
+    <div
+      className="fixed inset-0 bg-black/40 transition-all duration-300 ease-in-out"
+      onClick={() => setIsOpen(false)}
+      aria-hidden="true"
+    />
+    <InvoiceUploadDialog
+      setIsOpen={setIsOpen}
+      isOpen={isOpen}
+    />
+  </SidebarProvider>
+)}
 
-          </>
-        )}
-      </SidebarProvider>
     </header>
   )
 }

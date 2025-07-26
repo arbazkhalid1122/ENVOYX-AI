@@ -9,9 +9,6 @@ import ProgressTable from "@/components/tables/progress-table"
 import ResolveTable from "@/components/tables/resolve-table"
 import ProcessedTable from "@/components/tables/processed-table"
 import RejectedTable from "@/components/tables/rejected-table"
-import InvoiceUploadDialog from "@/components/invoices/finance-dialog"
-import { SidebarProvider } from "../ui/sidebar"
-import { useState } from "react"
 
 export default function InvoiceHistoryTabs() {
   return (

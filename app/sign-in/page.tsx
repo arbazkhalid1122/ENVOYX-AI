@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -21,9 +22,37 @@ export default ValidateAccessCodePage
 
 function ValidationForm() {
   const router = useRouter()
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [loading, setLoading] = useState(false)
 
   const handleValidate = async () => {
-    router.push("/validate-access-code")
+    try {
+      setLoading(true)
+      const res = await fetch("http://localhost:5000/auth/signin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        console.error("Error:", data)
+        alert(data?.message?.join(", ") || "Login failed")
+        return
+      }
+
+      // On success, you can route to another page or handle token etc.
+      router.push("/validate-access-code")
+    } catch (error) {
+      console.error("Error during login:", error)
+      alert("An unexpected error occurred.")
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -44,7 +73,8 @@ function ValidationForm() {
             type="email"
             placeholder="Enter your work email"
             className="w-full border-[#e4e4e7] focus:border-[#03a84e] focus:ring-[#03a84e] h-12 sm:h-14 px-4 text-sm sm:text-base"
-            value=""
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
 
@@ -54,7 +84,8 @@ function ValidationForm() {
             type="password"
             placeholder="Enter your Password"
             className="w-full border-[#e4e4e7] focus:border-[#03a84e] focus:ring-[#03a84e] h-12 sm:h-14 px-4 text-sm sm:text-base"
-            value=""
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </div>
       </div>
@@ -69,13 +100,13 @@ function ValidationForm() {
         </Button>
         <Button
           onClick={handleValidate}
+          disabled={loading}
           variant="default"
           size="lg"
           className="bg-[#081f24] hover:bg-[#0d2c0d] text-white w-fit h-12 sm:h-14 text-xs sm:text-sm lg:text-base font-medium rounded-lg shadow-sm px-6"
         >
-          Login to your account
+          {loading ? "Logging in..." : "Login to your account"}
         </Button>
-
       </div>
 
       <div className="border-t border-[#E4E4E7] my-6 sm:my-8 hidden sm:block" />

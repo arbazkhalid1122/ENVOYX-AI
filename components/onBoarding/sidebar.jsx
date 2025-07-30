@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, useSidebar } from "@/components/ui/sidebar"
 import { Sheet, SheetContent, SheetHeader, SheetFooter } from "@/components/ui/sheet"
+import axios from "axios"
 
 // Hook to detect mobile screen
 function useIsMobile() {
@@ -45,10 +46,21 @@ function BusinessProfileForm({ onSave, onCancel, open = true, onOpenChange }) {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
-  const handleSave = () => {
-    onSave?.(formData)
-    console.log("Saving business profile:", formData)
+const handleSave = async () => {
+  try {
+    const payload = {
+      ...formData,
+      multipleBranches: selected,
+    }
+
+    const res = await axios.post("http://localhost:5000/business-profile", payload)
+    console.log("Business profile saved:", res.data)
+
+    onSave?.(payload)
+  } catch (err) {
+    console.error("Failed to save business profile:", err)
   }
+}
 
   const handleCancel = () => {
     onCancel?.()

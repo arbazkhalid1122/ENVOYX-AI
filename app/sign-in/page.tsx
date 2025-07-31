@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import Header from "@/components/Header"
+import { signIn } from "next-auth/react"
 
 function ValidateAccessCodePage() {
   return (
@@ -26,34 +27,52 @@ function ValidationForm() {
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
 
+  // const handleValidate = async () => {
+  //   try {
+  //     setLoading(true)
+  //     const res = await fetch("http://localhost:5000/auth/signin", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ email, password }),
+  //     })
+
+  //     const data = await res.json()
+
+  //     if (!res.ok) {
+  //       console.error("Error:", data)
+  //       alert(data?.message?.join(", ") || "Login failed")
+  //       return
+  //     }
+
+  //     // On success, you can route to another page or handle token etc.
+  //     router.push("/validate-access-code")
+  //   } catch (error) {
+  //     console.error("Error during login:", error)
+  //     alert("An unexpected error occurred.")
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
+
   const handleValidate = async () => {
-    try {
-      setLoading(true)
-      const res = await fetch("http://localhost:5000/auth/signin", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      })
+  setLoading(true)
 
-      const data = await res.json()
+  const result = await signIn("credentials", {
+    redirect: false,
+    email,
+    password,
+  })
 
-      if (!res.ok) {
-        console.error("Error:", data)
-        alert(data?.message?.join(", ") || "Login failed")
-        return
-      }
-
-      // On success, you can route to another page or handle token etc.
-      router.push("/validate-access-code")
-    } catch (error) {
-      console.error("Error during login:", error)
-      alert("An unexpected error occurred.")
-    } finally {
-      setLoading(false)
-    }
+  if (result?.error) {
+    alert("Invalid credentials")
+  } else {
+    router.push("/validate-access-code") // or wherever you want
   }
+
+  setLoading(false)
+}
 
   return (
     <div className="bg-white rounded-2xl p-4 sm:p-8 lg:p-12 xl:p-16 max-w-sm sm:max-w-md lg:max-w-lg xl:max-w-xl w-full shadow-2xl">

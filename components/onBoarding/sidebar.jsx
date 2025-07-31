@@ -18,58 +18,51 @@ function useIsMobile() {
     const checkIsMobile = () => {
       setIsMobile(window.innerWidth < 768)
     }
-
     checkIsMobile()
     window.addEventListener("resize", checkIsMobile)
-
     return () => window.removeEventListener("resize", checkIsMobile)
   }, [])
 
   return isMobile
 }
 
-function BusinessProfileForm({ onSave, onCancel, open = true, onOpenChange }) {
-  const { setOpen } = useSidebar()
-  const isMobile = useIsMobile()
-  const [selected, setSelected] = React.useState("yes")
-  const [formData, setFormData] = React.useState({
-    businessName: "",
-    industry: "",
-    businessType: "",
-    businessAddress: "",
-    city: "",
-    country: "",
-    multipleBranches: "yes",
-  })
+// Move components outside to prevent recreation on every render
+const HeaderContent = React.memo(({ onCancel }) => (
+  <div className="flex items-center gap-3 px-4 sm:px-6 py-4">
+    <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg border border-gray-100/80" onClick={onCancel}>
+      <ChevronLeft className="h-5 w-5 text-[#03A84E]" />
+    </Button>
+    <h1 className="sm:text-lg text-gray-900 font-semibold">Setup business profile</h1>
+  </div>
+))
 
-  const handleInputChange = (field, value) => {
-    setFormData((prev) => ({ ...prev, [field]: value }))
-  }
+const FooterContent = React.memo(({ onCancel, onSave }) => (
+  <div className="px-4 sm:px-6 py-4">
+    <div className="flex gap-3 justify-between">
+      <Button
+        variant="outline"
+        onClick={onCancel}
+        className="h-11 border-gray-200 text-[#081F24] hover:bg-gray-50 bg-transparent rounded-lg transition-all flex-1 sm:flex-none"
+      >
+        Cancel
+      </Button>
+      <Button
+        onClick={onSave}
+        className="h-11 bg-gray-900 text-white hover:bg-gray-800 rounded-lg transition-all flex-1 sm:flex-none"
+      >
+        Save
+      </Button>
+    </div>
+  </div>
+))
 
-const handleSave = async () => {
-  try {
-    const payload = {
-      ...formData,
-      multipleBranches: selected,
-    }
-
-    const res = await axios.post("http://localhost:5000/business-profile", payload)
-    console.log("Business profile saved:", res.data)
-
-    onSave?.(payload)
-  } catch (err) {
-    console.error("Failed to save business profile:", err)
-  }
-}
-
-  const handleCancel = () => {
-    onCancel?.()
-    onOpenChange?.(false)
-    setOpen(false)
-  }
-
-  // Form content component to reuse in both mobile and desktop
-  const FormContent = () => (
+const FormContent = React.memo(
+  ({
+    formData,
+    selected,
+    onInputChange,
+    onSelectedChange,
+  }) => (
     <div className="space-y-4 sm:space-y-6">
       {/* Business Name */}
       <div className="space-y-2">
@@ -79,7 +72,7 @@ const handleSave = async () => {
         <Input
           id="businessName"
           value={formData.businessName}
-          onChange={(e) => handleInputChange("businessName", e.target.value)}
+          onChange={(e) => onInputChange("businessName", e.target.value)}
           className="h-11 border-gray-200 focus:border-blue-500 focus:ring-blue-500 rounded-lg transition-all"
         />
       </div>
@@ -88,11 +81,11 @@ const handleSave = async () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-2 w-full">
           <Label className="text-sm font-normal text-[#081F24]">Industry</Label>
-          <Select>
+          <Select value={formData.industry} onValueChange={(value) => onInputChange("industry", value)}>
             <SelectTrigger className="!h-12 !min-h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500 rounded-lg w-full">
               <SelectValue placeholder="Select" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className='z-100'>
               <SelectItem value="technology">Technology</SelectItem>
               <SelectItem value="healthcare">Healthcare</SelectItem>
               <SelectItem value="finance">Finance</SelectItem>
@@ -101,14 +94,13 @@ const handleSave = async () => {
             </SelectContent>
           </Select>
         </div>
-
         <div className="space-y-2 w-full">
           <Label className="text-sm font-normal text-[#081F24]">Type of business</Label>
-          <Select value={formData.businessType} onValueChange={(value) => handleInputChange("businessType", value)}>
+          <Select value={formData.businessType} onValueChange={(value) => onInputChange("businessType", value)}>
             <SelectTrigger className="!h-12 !min-h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500 rounded-lg w-full">
               <SelectValue placeholder="Select" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className='z-100'>
               <SelectItem value="llc">LLC</SelectItem>
               <SelectItem value="corporation">Corporation</SelectItem>
               <SelectItem value="partnership">Partnership</SelectItem>
@@ -125,7 +117,7 @@ const handleSave = async () => {
         <Input
           id="businessAddress"
           value={formData.businessAddress}
-          onChange={(e) => handleInputChange("businessAddress", e.target.value)}
+          onChange={(e) => onInputChange("businessAddress", e.target.value)}
           className="h-11 border-gray-200 focus:border-blue-500 focus:ring-blue-500 rounded-lg transition-all"
         />
       </div>
@@ -139,18 +131,17 @@ const handleSave = async () => {
           <Input
             id="city"
             value={formData.city}
-            onChange={(e) => handleInputChange("city", e.target.value)}
+            onChange={(e) => onInputChange("city", e.target.value)}
             className="h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500 rounded-lg transition-all"
           />
         </div>
-
         <div className="space-y-2 w-full">
           <Label className="text-sm font-normal text-[#081F24]">Country of Location</Label>
-          <Select value={formData.country} onValueChange={(value) => handleInputChange("country", value)}>
+          <Select value={formData.country} onValueChange={(value) => onInputChange("country", value)}>
             <SelectTrigger className="h-12 min-h-12 w-full border-gray-200 focus:border-blue-500 focus:ring-blue-500 rounded-lg">
               <SelectValue placeholder="Select country" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className='z-100'>
               <SelectItem value="us">United States</SelectItem>
               <SelectItem value="ca">Canada</SelectItem>
               <SelectItem value="uk">United Kingdom</SelectItem>
@@ -171,11 +162,12 @@ const handleSave = async () => {
         >
           {/* Yes Option */}
           <button
-            onClick={() => setSelected("yes")}
+            type="button"
+            onClick={() => onSelectedChange("yes")}
             className={`
-              relative flex-1 p-3 sm:p-4 flex items-center justify-center transition-colors text-sm sm:text-base
-              ${selected === "yes" ? "bg-[#FAFAFA]" : "bg-white text-[#081F24] hover:bg-gray-50"}
-            `}
+            relative flex-1 p-3 sm:p-4 flex items-center justify-center transition-colors text-sm sm:text-base
+            ${selected === "yes" ? "bg-[#FAFAFA]" : "bg-white text-[#081F24] hover:bg-gray-50"}
+          `}
           >
             <span className="">Yes</span>
             {selected === "yes" && (
@@ -184,17 +176,16 @@ const handleSave = async () => {
               </div>
             )}
           </button>
-
           {/* Divider */}
           <div className="w-px bg-gray-200"></div>
-
           {/* No Option */}
           <button
-            onClick={() => setSelected("no")}
+            type="button"
+            onClick={() => onSelectedChange("no")}
             className={`
-              relative flex-1 p-3 sm:p-4 flex items-center justify-center transition-colors text-sm sm:text-base
-              ${selected === "no" ? "bg-[#FAFAFA]" : "bg-white text-[#081F24] hover:bg-gray-50"}
-            `}
+            relative flex-1 p-3 sm:p-4 flex items-center justify-center transition-colors text-sm sm:text-base
+            ${selected === "no" ? "bg-[#FAFAFA]" : "bg-white text-[#081F24] hover:bg-gray-50"}
+          `}
           >
             <span className="">No</span>
             {selected === "no" && (
@@ -206,43 +197,52 @@ const handleSave = async () => {
         </div>
       </div>
     </div>
-  )
+  ),
+)
 
-  // Header component to reuse
-  const HeaderContent = () => (
-    <div className="flex items-center gap-3 px-4 sm:px-6 py-4">
-      <Button
-        variant="ghost"
-        size="icon"
-        className="h-8 w-8 rounded-lg border border-gray-100/80"
-        onClick={handleCancel}
-      >
-        <ChevronLeft className="h-5 w-5 text-[#03A84E]" />
-      </Button>
-      <h1 className="sm:text-lg text-gray-900 font-semibold">Setup business profile</h1>
-    </div>
-  )
+function BusinessProfileForm({ onSave, onCancel, open = true, onOpenChange }) {
+  const { setOpen } = useSidebar()
+  const isMobile = useIsMobile()
+  const [selected, setSelected] = React.useState("yes")
+  const [formData, setFormData] = React.useState({
+    businessName: "",
+    industry: "",
+    businessType: "",
+    businessAddress: "",
+    city: "",
+    country: "",
+    multipleBranches: "yes",
+  })
 
-  // Footer component to reuse
-  const FooterContent = () => (
-    <div className="px-4 sm:px-6 py-4">
-      <div className="flex gap-3 justify-between">
-        <Button
-          variant="outline"
-          onClick={handleCancel}
-          className="h-11 border-gray-200 text-[#081F24] hover:bg-gray-50 bg-transparent rounded-lg transition-all flex-1 sm:flex-none"
-        >
-          Cancel
-        </Button>
-        <Button
-          onClick={handleSave}
-          className="h-11 bg-gray-900 text-white hover:bg-gray-800 rounded-lg transition-all flex-1 sm:flex-none"
-        >
-          Save
-        </Button>
-      </div>
-    </div>
-  )
+  // Memoize the input change handler to prevent recreation
+  const handleInputChange = React.useCallback((field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }))
+  }, [])
+
+  // Memoize the selected change handler
+  const handleSelectedChange = React.useCallback((value) => {
+    setSelected(value)
+  }, [])
+
+  const handleSave = React.useCallback(async () => {
+    try {
+      const payload = {
+        ...formData,
+        multipleBranches: selected,
+      }
+      const res = await axios.post("http://localhost:5000/business-profile", payload)
+      console.log("Business profile saved:", res.data)
+      onSave?.(payload)
+    } catch (err) {
+      console.error("Failed to save business profile:", err)
+    }
+  }, [formData, selected, onSave])
+
+  const handleCancel = React.useCallback(() => {
+    onCancel?.()
+    onOpenChange?.(false)
+    setOpen(false)
+  }, [onCancel, onOpenChange, setOpen])
 
   // Mobile drawer
   if (isMobile) {
@@ -250,15 +250,18 @@ const handleSave = async () => {
       <Sheet open={open} onOpenChange={onOpenChange}>
         <SheetContent side="right" className="w-full p-0 flex flex-col bg-white">
           <SheetHeader className="border-b border-gray-100/80 p-0 bg-white shrink-0">
-            <HeaderContent />
+            <HeaderContent onCancel={handleCancel} />
           </SheetHeader>
-
           <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
-            <FormContent />
+            <FormContent
+              formData={formData}
+              selected={selected}
+              onInputChange={handleInputChange}
+              onSelectedChange={handleSelectedChange}
+            />
           </div>
-
           <SheetFooter className="border-t border-gray-100/80 p-0 bg-white/90 shrink-0">
-            <FooterContent />
+            <FooterContent onCancel={handleCancel} onSave={handleSave} />
           </SheetFooter>
         </SheetContent>
       </Sheet>
@@ -283,15 +286,18 @@ const handleSave = async () => {
       }}
     >
       <SidebarHeader className="border-b border-gray-100/80 p-0 bg-white">
-        <HeaderContent />
+        <HeaderContent onCancel={handleCancel} />
       </SidebarHeader>
-
       <SidebarContent className="px-4 sm:px-6 py-6 overflow-y-auto bg-white rounded-2xl">
-        <FormContent />
+        <FormContent
+          formData={formData}
+          selected={selected}
+          onInputChange={handleInputChange}
+          onSelectedChange={handleSelectedChange}
+        />
       </SidebarContent>
-
       <SidebarFooter className="border-t border-gray-100/80 p-0 rounded-b-2xl bg-white/90">
-        <FooterContent />
+        <FooterContent onCancel={handleCancel} onSave={handleSave} />
       </SidebarFooter>
     </Sidebar>
   )

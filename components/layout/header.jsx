@@ -49,7 +49,7 @@ export default function Header() {
   <SidebarProvider open={isOpen} onOpenChange={setIsOpen} className="fixed z-100">
     {/* Dark backdrop overlay */}
     <div
-      className="fixed inset-0 bg-black/40 transition-all duration-300 ease-in-out"
+      className={`fixed lg:bg-black/40 md:bg-black/40 sm:bg-transparent inset-0 transition-all duration-300 ease-in-out`}
       onClick={() => setIsOpen(false)}
       aria-hidden="true"
     />

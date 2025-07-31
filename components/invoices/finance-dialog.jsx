@@ -238,7 +238,7 @@ function InvoiceUploadDialog({ open = true, setIsOpen }) {
           <div className="flex flex-col items-center space-y-4">
             {/* Upload Icon */}
             <div className="w-16 h-16 flex items-center justify-center">
-              <Image src="/placeholder.svg?height=50&width=50" width={50} height={50} alt="Upload" />
+              <Image src="/Image.png" width={50} height={50} alt="Upload" />
             </div>
             {/* Upload Text */}
             <div className="space-y-2">

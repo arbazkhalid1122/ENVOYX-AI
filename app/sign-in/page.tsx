@@ -27,34 +27,6 @@ function ValidationForm() {
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
 
-  // const handleValidate = async () => {
-  //   try {
-  //     setLoading(true)
-  //     const res = await fetch("http://localhost:5000/auth/signin", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ email, password }),
-  //     })
-
-  //     const data = await res.json()
-
-  //     if (!res.ok) {
-  //       console.error("Error:", data)
-  //       alert(data?.message?.join(", ") || "Login failed")
-  //       return
-  //     }
-
-  //     // On success, you can route to another page or handle token etc.
-  //     router.push("/validate-access-code")
-  //   } catch (error) {
-  //     console.error("Error during login:", error)
-  //     alert("An unexpected error occurred.")
-  //   } finally {
-  //     setLoading(false)
-  //   }
-  // }
 
   const handleValidate = async () => {
   setLoading(true)

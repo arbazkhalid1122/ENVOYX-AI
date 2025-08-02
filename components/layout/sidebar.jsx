@@ -5,6 +5,7 @@ import UserProfile from "../invoices/user-profile"
 import Navigation from "../invoices/navigation"
 import Image from "next/image"
 import { Sidebar as SidebarPrimitive, SidebarContent, SidebarHeader, SidebarFooter } from "@/components/ui/sidebar"
+import { signOut } from "next-auth/react"
 
 export default function Sidebar({ activeItem, setActiveItem }) {
   const pathname = usePathname()
@@ -54,10 +55,13 @@ export default function Sidebar({ activeItem, setActiveItem }) {
 
       <SidebarFooter className="p-6 bg-white">
         <div className="border-t border-[#e4e4e7] pt-6">
-          <button className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-black font-medium hover:bg-[#ee6a5f]/10 transition-colors border border-[#e4e4e7] rounded-full w-[fit-content]">
-            <LogOut className="w-4 h-4 text-[#ee6a5f]" />
-            Logout
-          </button>
+        <button
+      onClick={() => signOut({ callbackUrl: '/sign-in' })}
+      className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-black font-medium hover:bg-[#ee6a5f]/10 transition-colors border border-[#e4e4e7] rounded-full w-[fit-content]"
+    >
+      <LogOut className="w-4 h-4 text-[#ee6a5f]" />
+      Logout
+    </button>
         </div>
       </SidebarFooter>
     </SidebarPrimitive>

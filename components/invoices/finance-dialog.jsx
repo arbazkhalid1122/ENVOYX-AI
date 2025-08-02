@@ -8,6 +8,7 @@ import { Sheet, SheetContent, SheetHeader, SheetFooter } from "@/components/ui/s
 import { Checkbox } from "@/components/ui/checkbox"
 import Image from "next/image"
 import axios from "axios"
+import api from "@/lib/axios"
 
 // Hook to detect mobile screen
 function useIsMobile() {
@@ -58,7 +59,7 @@ function InvoiceUploadDialog({ open = true, setIsOpen }) {
     })
 
     try {
-       await axios.post("http://localhost:5000/invoice/upload", formData, {
+       await api.post("/invoice/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

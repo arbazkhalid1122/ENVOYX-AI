@@ -9,6 +9,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, useSidebar } from "@/components/ui/sidebar"
 import { Sheet, SheetContent, SheetHeader, SheetFooter } from "@/components/ui/sheet"
 import axios from "axios"
+import api from "@/lib/axios"
+import { getSession, useSession } from "next-auth/react"
 
 // Hook to detect mobile screen
 function useIsMobile() {
@@ -201,7 +203,7 @@ const FormContent = React.memo(
 )
 
 function BusinessProfileForm({ onSave, onCancel, open = true, onOpenChange }) {
-  const { setOpen } = useSidebar()
+  const { setOpen } = useSidebar()  
   const isMobile = useIsMobile()
   const [selected, setSelected] = React.useState("yes")
   const [formData, setFormData] = React.useState({
@@ -230,13 +232,14 @@ function BusinessProfileForm({ onSave, onCancel, open = true, onOpenChange }) {
         ...formData,
         multipleBranches: selected,
       }
-      const res = await axios.post("http://localhost:5000/business-profile", payload)
+      const res = await api.post("/business-profile", payload)
       console.log("Business profile saved:", res.data)
       onSave?.(payload)
     } catch (err) {
       console.error("Failed to save business profile:", err)
     }
   }, [formData, selected, onSave])
+
 
   const handleCancel = React.useCallback(() => {
     onCancel?.()

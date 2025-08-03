@@ -59,7 +59,7 @@ function InvoiceUploadDialog({ open = true, setIsOpen }) {
     })
 
     try {
-       await api.post("/invoice/upload", formData, {
+       await api.post("/invoices/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

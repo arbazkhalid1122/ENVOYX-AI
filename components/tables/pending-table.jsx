@@ -4,8 +4,14 @@ import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { MoreHorizontal, ArrowUpDown, AlertTriangle } from "lucide-react"
+import { useEffect } from "react"
+import api from "@/lib/axios"
 
 export default function PendingTable() {
+  useEffect(()=>{
+    const res = api.get('/invoices')
+
+console.log("res", res);  },[])
   const pendingData = [
     { id: "Claims #007", date: "Dec 1, 2025", status: "Pending" },
     { id: "Claims #006", date: "Nov 1, 2025", status: "Pending" },

@@ -19,7 +19,7 @@ function DashboardContent() {
     }
 
     const handleProceed = () => {
-        route.push("/document-signing")
+        route.push("/terms-and-conditions")
         console.log("User proceeded with verification")
     }
 

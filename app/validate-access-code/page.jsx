@@ -55,7 +55,7 @@ function ValidationForm() {
         })
         setSuccess('Account created successfully! Redirecting to document signing...')
         setTimeout(() => {
-          router.push('/document-signing')
+          router.push('/terms-and-conditions')
         }, 2000)
       } else {
         // Handle regular access code validation

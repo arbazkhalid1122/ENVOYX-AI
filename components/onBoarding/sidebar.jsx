@@ -235,6 +235,8 @@ function BusinessProfileForm({ onSave, onCancel, open = true, onOpenChange }) {
       const res = await api.post("/business-profile", payload)
       console.log("Business profile saved:", res.data)
       onSave?.(payload)
+      // Redirect to dashboard after successful save
+      window.location.href = "/dashboard"
     } catch (err) {
       console.error("Failed to save business profile:", err)
     }

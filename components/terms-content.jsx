@@ -111,7 +111,7 @@ useEffect(() => {
 }, [setActiveSection, setSectionProgress, setIndicatorTop, setIndicatorHeight]);
 
   const handleAcceptTerms = () => {
-    router.push("/create-profile")
+    router.push("/invoices")
   }
 
   const handleDecline = () => {

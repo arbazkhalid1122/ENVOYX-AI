@@ -41,10 +41,7 @@ function ValidationForm() {
     if (result?.error) {
       alert("Invalid credentials")
     } else {
-      // Check if user has completed document signing
-      // For now, we'll redirect to document signing
-      // In a real app, you'd check a user field or session
-      router.push("/document-signing")
+      router.push("/dashboard")
     }
 
     setLoading(false)

@@ -9,16 +9,34 @@ declare module "next-auth" {
     token?: string;
     role?: string;
     companyId?: string;
+    agreedTerms?: boolean;
+    hasBusinessProfile?: boolean;
   }
 
   interface Session {
     accessToken?: string;
+    user?: {
+      id?: string;
+      email?: string;
+      name?: string;
+      role?: string;
+      companyId?: string;
+      agreedTerms?: boolean;
+      hasBusinessProfile?: boolean;
+    };
   }
 }
 
 declare module "next-auth/jwt" {
   interface JWT {
     accessToken?: string;
+    agreedTerms?: boolean;
+    hasBusinessProfile?: boolean;
+    userId?: string;
+    email?: string;
+    name?: string;
+    role?: string;
+    companyId?: string;
   }
 }
 
@@ -56,6 +74,8 @@ export const authOptions: NextAuthOptions = {
               token: user.token,
               role: user.role,
               companyId: user.companyId,
+              agreedTerms: user.agreedTerms,
+              hasBusinessProfile: user.hasBusinessProfile,
             } as any;
           }
         } catch (error) {
@@ -69,12 +89,28 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user?.token) {
         token.accessToken = user.token;
+        token.agreedTerms = user.agreedTerms;
+        token.hasBusinessProfile = user.hasBusinessProfile;
+        token.userId = user.id;
+        token.email = user.email;
+        token.name = user.name;
+        token.role = user.role;
+        token.companyId = user.companyId;
       }
       return token;
     },
     async session({ session, token }) {
       if (token.accessToken) {
         session.accessToken = token.accessToken;
+        session.user = {
+          id: token.userId,
+          email: token.email,
+          name: token.name,
+          role: token.role,
+          companyId: token.companyId,
+          agreedTerms: token.agreedTerms,
+          hasBusinessProfile: token.hasBusinessProfile,
+        };
       }
       return session;
     },

@@ -4,12 +4,16 @@ import { usePathname } from "next/navigation"
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar"
 import Sidebar from "@/components/layout/sidebar"
 import { Menu } from "lucide-react"
+import { useSession } from "next-auth/react"
 
 // Define routes that should have sidebar
 const SIDEBAR_ROUTES = ["/on-boarding", "/dashboard", "/invoices"]
 
 export default function ConditionalSidebarLayout({ children }) {
-  const pathname = usePathname()
+  const {data: session} = useSession()
+
+console.log("session", session);  
+const pathname = usePathname()
 
   // Check if current route should have sidebar
   const shouldShowSidebar = SIDEBAR_ROUTES.some((route) => pathname.startsWith(route))

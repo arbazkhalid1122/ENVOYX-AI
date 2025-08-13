@@ -11,6 +11,7 @@ export async function middleware(req: NextRequest) {
     pathname.startsWith("/api/auth") ||
     pathname.startsWith("/forgot-password") ||
     pathname.startsWith("/reset-password") ||
+    pathname.startsWith("/validate-access-code") ||
     pathname.startsWith("/signup") || // Next.js internal routes
     pathname.startsWith("/static") || // Static files
     pathname.startsWith("/_next") ||

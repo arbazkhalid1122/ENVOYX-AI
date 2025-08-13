@@ -9,6 +9,10 @@ export async function middleware(req: NextRequest) {
   const isPublicRoute = 
     pathname === "/sign-in" ||
     pathname.startsWith("/api/auth") ||
+    pathname.startsWith("/forgot-password") ||
+    pathname.startsWith("/reset-password") ||
+    pathname.startsWith("/signup") || // Next.js internal routes
+    pathname.startsWith("/static") || // Static files
     pathname.startsWith("/_next") ||
       pathname.match(/\.(.*)$/) || // allow static file extensions like .png, .jpg, .css, etc.
     pathname === "/favicon.ico";

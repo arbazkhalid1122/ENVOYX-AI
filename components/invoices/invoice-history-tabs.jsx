@@ -9,8 +9,27 @@ import ProgressTable from "@/components/tables/progress-table"
 import ResolveTable from "@/components/tables/resolve-table"
 import ProcessedTable from "@/components/tables/processed-table"
 import RejectedTable from "@/components/tables/rejected-table"
+import { useEffect, useState } from "react"
+import api from "@/lib/axios"
 
 export default function InvoiceHistoryTabs() {
+  const [invoices, setInvoices] = useState([])
+
+  const fetchInvoices = async () => {
+    try {
+      const response = await api.get('/invoices')
+
+console.log("response", response);      
+      setInvoices(response.data.data)
+    } catch (error) {
+      console.error("Error fetching invoices:", error)
+    }
+  }
+
+ useEffect(()=>{
+    fetchInvoices()
+},[])
+  
   return (
     <div className="bg-[#ffffff] rounded-lg border border-[#e4e4e7]">
       <div className="p-6 border-b border-[#e4e4e7]">
@@ -72,7 +91,7 @@ export default function InvoiceHistoryTabs() {
         </div>
 
         <TabsContent value="pending" className="mt-0">
-          <PendingTable />
+          <PendingTable invoices={invoices} />
         </TabsContent>
 
         <TabsContent value="progress" className="mt-0">

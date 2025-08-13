@@ -5,71 +5,92 @@ import { useRouter } from "next/navigation"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import Header from "@/components/Header"
-import { signIn } from "next-auth/react"
-import Link from "next/link"
+import axios from "@/lib/axios"
 
-function ValidateAccessCodePage() {
+function SignupPage() {
   return (
     <div className="min-h-screen bg-[#081f24] relative overflow-hidden">
       <BackgroundElements />
       <Header variant="dark" className="relative z-20" />
       <div className="relative z-10 flex items-center justify-center min-h-[calc(100vh-80px)] sm:min-h-[calc(100vh-120px)] px-4 py-8">
-        <ValidationForm />
+        <SignupForm />
       </div>
     </div>
   )
 }
 
-export default ValidateAccessCodePage
+export default SignupPage
 
-function ValidationForm() {
+function SignupForm() {
   const router = useRouter()
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    companyName: "",
+  })
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
+  const [success, setSuccess] = useState("")
 
-
-  const handleValidate = async () => {
+  const handleSignup = async () => {
     setLoading(true)
+    setError("")
+    setSuccess("")
 
-    const result = await signIn("credentials", {
-      redirect: false,
-      email,
-      password,
-    })
-
-    if (result?.error) {
-      alert("Invalid credentials")
-    } else {
-      // Check if user has completed document signing
-      // For now, we'll redirect to document signing
-      // In a real app, you'd check a user field or session
-      router.push("/document-signing")
+    try {
+      const response = await axios.post('/auth/signup-with-otp', formData)
+      setSuccess(response.data.message)
+      // Redirect to validate-access-code with email parameter
+      setTimeout(() => {
+        router.push(`/validate-access-code?email=${encodeURIComponent(formData.email)}`)
+      }, 2000)
+    } catch (error: any) {
+      setError(error.response?.data?.message || 'Something went wrong')
+    } finally {
+      setLoading(false)
     }
-
-    setLoading(false)
   }
+
+
 
   return (
     <div className="bg-white rounded-2xl p-4 sm:p-8 lg:p-12 xl:p-16 max-w-sm sm:max-w-md lg:max-w-lg xl:max-w-xl w-full shadow-2xl">
       <div className="text-center mb-6 sm:mb-8">
         <h1 className="text-xl sm:text-2xl lg:text-3xl font-medium text-[#081F24] mb-3 sm:mb-4">
-          Sign in to your account 👋
+          Create your account 🚀
         </h1>
         <p className="text-sm sm:text-base text-[#5f6057] leading-relaxed">
-          <span className="block text-[#03A84E] text-base sm:text-lg lg:text-xl">Continue to EnvoyX</span>
+          <span className="block text-[#03A84E] text-base sm:text-lg lg:text-xl">Join EnvoyX today</span>
         </p>
       </div>
 
+      {error && (
+        <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+          {error}
+        </div>
+      )}
+
       <div className="space-y-4 sm:space-y-6">
         <div>
-          <label className="block text-sm font-medium text-[#272635] mb-2">Work email</label>
+          <label className="block text-sm font-medium text-[#272635] mb-2">Full Name</label>
+          <Input
+            type="text"
+            placeholder="Enter your full name"
+            className="w-full border-[#e4e4e7] focus:border-[#03a84e] focus:ring-[#03a84e] h-12 sm:h-14 px-4 text-sm sm:text-base"
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-[#272635] mb-2">Work Email</label>
           <Input
             type="email"
             placeholder="Enter your work email"
             className="w-full border-[#e4e4e7] focus:border-[#03a84e] focus:ring-[#03a84e] h-12 sm:h-14 px-4 text-sm sm:text-base"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={formData.email}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           />
         </div>
 
@@ -77,19 +98,22 @@ function ValidationForm() {
           <label className="block text-sm font-medium text-[#272635] mb-2">Password</label>
           <Input
             type="password"
-            placeholder="Enter your Password"
+            placeholder="Create a strong password"
             className="w-full border-[#e4e4e7] focus:border-[#03a84e] focus:ring-[#03a84e] h-12 sm:h-14 px-4 text-sm sm:text-base"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={formData.password}
+            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
           />
-          <div className="mt-2 text-right">
-            <Link
-            href={"/forgot-password"}
-              className="text-sm text-[#03A84E] hover:underline"
-            >
-              Forgot Password?
-            </Link>
-          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-[#272635] mb-2">Company Name (Optional)</label>
+          <Input
+            type="text"
+            placeholder="Enter your company name"
+            className="w-full border-[#e4e4e7] focus:border-[#03a84e] focus:ring-[#03a84e] h-12 sm:h-14 px-4 text-sm sm:text-base"
+            value={formData.companyName}
+            onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
+          />
         </div>
       </div>
 
@@ -97,32 +121,20 @@ function ValidationForm() {
         <Button
           variant="outline"
           size="lg"
-          onClick={() => router.push('/signup')}
+          onClick={() => router.push('/sign-in')}
           className="bg-white text-black border-[#e4e4e7] hover:bg-gray-50 w-fit h-12 sm:h-14 text-xs sm:text-sm lg:text-base font-medium rounded-lg shadow-sm px-6"
         >
-          Create Account
+          Already have an account?
         </Button>
         <Button
-          onClick={handleValidate}
-          disabled={loading}
+          onClick={handleSignup}
+          disabled={loading || !formData.name || !formData.email || !formData.password}
           variant="default"
           size="lg"
           className="bg-[#081f24] hover:bg-[#0d2c0d] text-white w-fit h-12 sm:h-14 text-xs sm:text-sm lg:text-base font-medium rounded-lg shadow-sm px-6"
         >
-          {loading ? "Logging in..." : "Login to your account"}
+          {loading ? "Creating account..." : "Create Account"}
         </Button>
-      </div>
-
-      <div className="mt-4 text-center">
-        <p className="text-sm text-[#5f6057]">
-          Don't have an account?{" "}
-          <button
-            onClick={() => router.push('/signup')}
-            className="text-[#03A84E] hover:underline font-medium"
-          >
-            Sign up here
-          </button>
-        </p>
       </div>
 
       <div className="border-t border-[#E4E4E7] my-6 sm:my-8 hidden sm:block" />

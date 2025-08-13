@@ -7,11 +7,8 @@ import { MoreHorizontal, ArrowUpDown, AlertTriangle } from "lucide-react"
 import { useEffect } from "react"
 import api from "@/lib/axios"
 
-export default function PendingTable() {
-  useEffect(()=>{
-    const res = api.get('/invoices')
+export default function PendingTable({invoices}) {
 
-console.log("res", res);  },[])
   const pendingData = [
     { id: "Claims #007", date: "Dec 1, 2025", status: "Pending" },
     { id: "Claims #006", date: "Nov 1, 2025", status: "Pending" },
@@ -51,18 +48,26 @@ console.log("res", res);  },[])
             </TableRow>
           </TableHeader>
           <TableBody>
-            {pendingData.map((row, index) => (
+            {invoices?.map((row, index) => (
               <TableRow key={index} className="border-b border-[#e4e4e7] hover:bg-[#f7f7f7]">
                 <TableCell className="font-medium text-[#000000] p-6">
                   <div className="flex items-center gap-2">
                     <AlertTriangle className="w-4 h-4 text-[#f59e0b]" />
-                    {row.id}
+                    {row.insuredId || 'Claims #007'}
                   </div>
                 </TableCell>
-                <TableCell className="text-[#49454f]">{row.date}</TableCell>
+                <TableCell className="text-[#49454f]">
+<TableCell className="text-[#49454f]">
+  {new Intl.DateTimeFormat('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  }).format(new Date(row.createdAt))}
+</TableCell>
+                </TableCell>
                 <TableCell>
                   <Badge variant="secondary" className="bg-[#f7f7f7] text-[#49454f] hover:bg-[#f7f7f7]">
-                    {row.status}
+                    {row.invoiceStatus}
                   </Badge>
                 </TableCell>
                 <TableCell>

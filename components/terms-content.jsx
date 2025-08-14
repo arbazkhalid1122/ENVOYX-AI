@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { useState, useEffect } from "react"
+import api from "@/lib/axios";
 
 export function TermsContent({ activeSection, setActiveSection, setSectionProgress, setIndicatorTop, setIndicatorHeight }) {
 
@@ -110,7 +111,8 @@ useEffect(() => {
   };
 }, [setActiveSection, setSectionProgress, setIndicatorTop, setIndicatorHeight]);
 
-  const handleAcceptTerms = () => {
+  const handleAcceptTerms = async() => {
+    await api.put('auth/user', { agreedToTerms: true })
     router.push("/invoices")
   }
 

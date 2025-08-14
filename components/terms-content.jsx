@@ -112,7 +112,7 @@ useEffect(() => {
 }, [setActiveSection, setSectionProgress, setIndicatorTop, setIndicatorHeight]);
 
   const handleAcceptTerms = async() => {
-    await api.put('auth/user', { agreedToTerms: true })
+    await api.put('auth/user', { agreedTerms: true })
     router.push("/invoices")
   }
 

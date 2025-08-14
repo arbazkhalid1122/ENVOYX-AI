@@ -27,24 +27,6 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/sign-in", req.url));
   }
 
-  // Check user status and redirect accordingly
-  if (token.agreedTerms !== undefined && token.hasBusinessProfile !== undefined) {
-    // If user hasn't agreed to terms, redirect to terms page
-    if (!token.agreedTerms && pathname !== "/terms-and-conditions") {
-      return NextResponse.redirect(new URL("/terms-and-conditions", req.url));
-    }
-
-    // // If user has agreed to terms but hasn't created a profile, redirect to create profile
-    if (token.agreedTerms && !token.hasBusinessProfile) {
-      // return NextResponse.redirect(new URL("/on-boarding", req.url));
-    }
-
-    // // If user has agreed to terms and has a profile, redirect to dashboard if on terms or create-profile
-    // if (token.agreedTerms && token.hasBusinessProfile && 
-    //     (pathname === "/terms-and-conditions" || pathname === "/create-profile")) {
-    //   return NextResponse.redirect(new URL("/dashboard", req.url));
-    // }
-  }
 
   return NextResponse.next();
 }

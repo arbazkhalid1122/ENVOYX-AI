@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation"
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar"
 import Sidebar from "@/components/layout/sidebar"
+import SettingsSidebar from "@/components/layout/settings-sidebar"
 import { Menu } from "lucide-react"
 import { useSession } from "next-auth/react"
 import { useEffect } from "react"
@@ -10,7 +11,7 @@ import api from "@/lib/axios"
 import { useRouter } from "next/navigation"
 
 // Define routes that should have sidebar
-const SIDEBAR_ROUTES = ["/on-boarding", "/dashboard", "/invoices"]
+const SIDEBAR_ROUTES = ["/on-boarding", "/dashboard", "/invoices", "/account-mangment"]
 
 export default function ConditionalSidebarLayout({ children }) {
 const session = useSession()
@@ -20,7 +21,7 @@ useEffect(() => {
     if(res.data.agreedTerms === false){
       router.push("/terms-and-conditions")
     }else if(res.data.onboarding === false){
-      router.push("/on-boarding")
+      // router.push("/on-boarding")
     }
   })
 }, [session.data?.user])
@@ -29,6 +30,9 @@ const pathname = usePathname()
 
   // Check if current route should have sidebar
   const shouldShowSidebar = SIDEBAR_ROUTES.some((route) => pathname.startsWith(route))
+  
+  // Check if current route is account management to show settings sidebar
+  const isAccountManagement = pathname.includes("/account-mangment")
 
   // If no sidebar needed, render children directly
   if (!shouldShowSidebar) {
@@ -38,7 +42,7 @@ const pathname = usePathname()
   // If sidebar needed, wrap with SidebarProvider
   return (
     <SidebarProvider>
-      <Sidebar />
+      {isAccountManagement ? <SettingsSidebar /> : <Sidebar />}
       <SidebarInset>
         {/* Mobile header with trigger */}
         <div className="md:hidden flex items-center p-4 bg-white border-b border-[#e4e4e7] sticky top-0 w-full">
